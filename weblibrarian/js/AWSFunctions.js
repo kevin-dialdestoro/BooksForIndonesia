@@ -76,7 +76,10 @@ function AWSSearch(page)
   params[document.getElementById('FieldName').value] = 
 			document.getElementById('SearchString').value;
   params["ItemPage"] = page;
-
+  var isbn = document.getElementById('inputISBN').value;
+  if (isbn != ""){
+      params["ISBN"] = isbn;
+  }
   AWSRequest(params,AWSSearchCallback);
 }
 
@@ -230,6 +233,27 @@ function AWSInsertCallback()
         win.WEBLIB_ClearDate();
 	win.WEBLIB_InsertEdition('');
         win.WEBLIB_InsertISBN('');
+   
+    //HACK
+    if (item.getElementsByTagName('EditorialReview').length > 0){
+            var review = item.getElementsByTagName('EditorialReview')[0].childNodes[1].childNodes[0].nodeValue;
+    win.WEBLIB_AddToDescription(review);
+    } 
+
+    
+    win.WEBLIB_ClearSubject();
+    var potentialNodes = item.getElementsByTagName('BrowseNodes')[0].getElementsByTagName('BrowseNode')[0].getElementsByTagName('Name');
+    var subject = [];
+    for (var i = 0; i < potentialNodes.length; i++){
+        var value = potentialNodes[i].childNodes[0].nodeValue;
+        if(value != "Subjects" && value != "Books"){
+            subject.push(value);
+        }
+    }
+    subject = subject.join(", ");
+    win.WEBLIB_AddToSubject(subject);
+    //
+
 	var ItemAttributesList = item.getElementsByTagName('ItemAttributes');
 	//log("*** AWSInsertCallback: ItemAttributesList.length is "+ItemAttributesList.length);
 	var k;
@@ -289,27 +313,27 @@ function AWSInsertCallback()
 		case 'Height':
 		case 'Width':
 		case 'Length':
-		case 'Weight':
-		  var units = attribute.attributes.getNamedItem("units");
-		  if (units == null) attribute.attributes.getNamedItem("Units");
-		  if (units != 'pixels') {
-                    win.WEBLIB_AddToDescription(attribute.tagName+' '+value+' '+units+"\n");
-                  } else {
-                    win.WEBLIB_AddToDescription(attribute.tagName+' '+value+"\n");
-		  }
-		  break;
-                default:
-                  var insertval = attribute.tagName;
-                  insertval += ' ';
-		  var ia;
-		  for (ia = 0; ia < attribute.attributes.length; ia++)
-		  {
-                      var attr = attribute.attributes.item(ia);
-                      insertval += attr.name+'="'+attr.value+'" ';
-		  }
-                  insertval += "\n";
-                  win.WEBLIB_AddToDescription(insertval);
-		  break;
+//		case 'Weight':
+//		  var units = attribute.attributes.getNamedItem("units");
+//		  if (units == null) attribute.attributes.getNamedItem("Units");
+//		  if (units != 'pixels') {
+//                    win.WEBLIB_AddToDescription(attribute.tagName+' '+value+' '+units+"\n");
+//                  } else {
+//                    win.WEBLIB_AddToDescription(attribute.tagName+' '+value+"\n");
+//		  }
+//		  break;
+//                default:
+//                  var insertval = attribute.tagName;
+//                  insertval += ' ';
+//		  var ia;
+//		  for (ia = 0; ia < attribute.attributes.length; ia++)
+//		  {
+//                      var attr = attribute.attributes.item(ia);
+//                      insertval += attr.name+'="'+attr.value+'" ';
+//		  }
+//                  insertval += "\n";
+//                  win.WEBLIB_AddToDescription(insertval);
+//		  break;
 	      }
 	    }
 	  }

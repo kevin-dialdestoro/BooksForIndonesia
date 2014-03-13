@@ -11,7 +11,7 @@ class WEBLIB_ShortCodes {
     $this->SearchTypes = array ('title' => __('Title','web-librarian'),
 				'author' => __('Author','web-librarian'),
 				'subject' => __('Subject','web-librarian') , 
-				'keyword' => __('Keyword','web-librarian'), 
+				'keyword' => __('Location','web-librarian'), 
 				'isbn' => __('ISBN','web-librarian'));
 
     add_shortcode('weblib_searchform' ,array($this,'search_form'));
@@ -309,42 +309,42 @@ class WEBLIB_ShortCodes {
 	$result .= '<div class="weblib-item-body weblib-item-row">';
 	$result .= '<div class="weblib-item-left weblib-item-element">';
 	$result .= '<div class="weblib-item-content-block">';
-	$result .= '<span class="weblib-item-content-element">';
-	$result .= '<span class="weblib-item-left-head">'.__('Status:','web-librarian').'</span>';
-	$result .= '<span class="weblib-item-left-content">';
-	$outitem = WEBLIB_OutItem::OutItemByBarcode($barcode);
-	$numberofholds = WEBLIB_HoldItem::HoldCountsOfBarcode($barcode);
-	if ($outitem != null) {
-	  $result .= __('Due ','web-librarian');
-	  $duedate = $outitem->datedue();
-	  if (mysql2date('U',$duedate) < time()) {
-	    $result .= '<span class="overdue" >'.strftime('%x',mysql2date('U',$duedate)).'</span>';
-	  } else {
-	    $result .= strftime('%x',mysql2date('U',$duedate));
-	  }
-	} else {
-	  $result .= __('Check Shelves','web-librarian');
-	}
-	$result .= '&nbsp;<span id="hold-count-'.$barcode.'">';
-	if ($numberofholds > 0) {
-          $result .= sprintf(_n('%d Hold','%d Holds',$numberofholds,'web-librarian'),
-                             $numberofholds);
-	}
-	$result .= '</span><!-- hold-count-... -->';
-	$result .= '</span><!-- weblib-item-left-content -->';
-	$result .= '</span><!-- weblib-item-content-element -->';
+	// $result .= '<span class="weblib-item-content-element">';
+	// $result .= '<span class="weblib-item-left-head">'.__('Status:','web-librarian').'</span>';
+	// $result .= '<span class="weblib-item-left-content">';
+	// $outitem = WEBLIB_OutItem::OutItemByBarcode($barcode);
+	// $numberofholds = WEBLIB_HoldItem::HoldCountsOfBarcode($barcode);
+	// if ($outitem != null) {
+	  // $result .= __('Due ','web-librarian');
+	  // $duedate = $outitem->datedue();
+	  // if (mysql2date('U',$duedate) < time()) {
+	    // $result .= '<span class="overdue" >'.strftime('%x',mysql2date('U',$duedate)).'</span>';
+	  // } else {
+	    // $result .= strftime('%x',mysql2date('U',$duedate));
+	  // }
+	// } else {
+	  // $result .= __('Check Shelves','web-librarian');
+	// }
+	// $result .= '&nbsp;<span id="hold-count-'.$barcode.'">';
+	// if ($numberofholds > 0) {
+          // $result .= sprintf(_n('%d Hold','%d Holds',$numberofholds,'web-librarian'),
+                             // $numberofholds);
+	// }
+	// $result .= '</span><!-- hold-count-... -->';
+	// $result .= '</span><!-- weblib-item-left-content -->';
+	// $result .= '</span><!-- weblib-item-content-element -->';
 	if ($item->subject() != '') {
 	  $result .= '<span class="weblib-item-content-element">';
 	  $result .= '<span class="weblib-item-left-head">'.__('Subject','web-librarian').'</span>';
 	  $result .= '<span class="weblib-item-left-content">'.$item->subject().'</span>';
 	  $result .= '</span><!-- weblib-item-content-element -->';
 	}
-	if ($item->category() != '') {
-	  $result .= '<span class="weblib-item-content-element">';
-	  $result .= '<span class="weblib-item-left-head">'.__('Category','web-librarian').'</span>';
-	  $result .= '<span class="weblib-item-left-content">'.$item->category().'</span>';
-	  $result .= '</span><!-- weblib-item-content-element -->';
-	}
+	// if ($item->category() != '') {
+	  // $result .= '<span class="weblib-item-content-element">';
+	  // $result .= '<span class="weblib-item-left-head">'.__('Category','web-librarian').'</span>';
+	  // $result .= '<span class="weblib-item-left-content">'.$item->category().'</span>';
+	  // $result .= '</span><!-- weblib-item-content-element -->';
+	// }
 	if ($item->media() != '') {
 	  $result .= '<span class="weblib-item-content-element">';
 	  $result .= '<span class="weblib-item-left-head">'.__('Media','web-librarian').'</span>';
@@ -369,12 +369,12 @@ class WEBLIB_ShortCodes {
 	  $result .= '<span class="weblib-item-left-content">'.$item->callnumber().'</span>';
 	  $result .= '</span><!-- weblib-item-content-element -->';
 	}
-	if ($item->type() != '') {
-	  $result .= '<span class="weblib-item-content-element">';
-	  $result .= '<span class="weblib-item-left-head">'.__('Type','web-librarian').'</span>';
-	  $result .= '<span class="weblib-item-left-content">'.$item->type().'</span>';
-	  $result .= '</span><!-- weblib-item-content-element -->';
-	}
+	// if ($item->type() != '') {
+	  // $result .= '<span class="weblib-item-content-element">';
+	  // $result .= '<span class="weblib-item-left-head">'.__('Type','web-librarian').'</span>';
+	  // $result .= '<span class="weblib-item-left-content">'.$item->type().'</span>';
+	  // $result .= '</span><!-- weblib-item-content-element -->';
+	// }
 	if ($item->description() != '') {
 	  $result .= '<span class="weblib-item-content-element">';
 	  $result .= '<span class="weblib-item-left-head">Description</span>';
@@ -384,14 +384,14 @@ class WEBLIB_ShortCodes {
 	$result .= '</div><!-- weblib-item-content-block -->';
 	$result .= '</div><!-- weblib-item-left -->';
 	$result .= '<div class="weblib-item-right weblib-item-element">';
-	$result .= '<span class="weblib-item-center-head">'.__('Keywords','web-librarian').'</span>';
-	$result .= '<p class="weblib-item-keyword-list">';
+    #HACK
+	$result .= '<span class="weblib-item-center-head">'.__('Location','web-librarian').'</span>';
+	$result .= '<ul>';
 	$space  = '';
 	foreach ($item->keywordsof() as $keyword) {
-	  $result .= $space.$keyword;
-	  $space  = ' ';
+	  $result .= '<li>'.$keyword.'</li>';
 	}
-	$result .= '</p>';
+	$result .= '</ul>';
 	$result .= '</div><!-- weblib-item-right" -->';
 	$result .= '</div><!-- weblib-item-body -->';
 	$result .= '</div><!-- weblib-item-long -->';
@@ -414,6 +414,15 @@ class WEBLIB_ShortCodes {
 	if ($moreinfourl != '') {$result .= '</a>';}
 	$result .= '<br />';
 	$result .= $item->author();
+    
+    #HACK
+    $result .= '<br />';
+    $space  = '';
+    foreach ($item->keywordsof() as $keyword) {
+      $result .= $space.$keyword;
+      $space  = '; ';
+    }
+    
 	if ($item->callnumber() != '') {
 	  $result .= '<br />'.__('Call Number:','web-librarian').'&nbsp;'.$item->callnumber();
 	}

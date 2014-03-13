@@ -49,13 +49,13 @@ function ajaxRequest() {
 function WEBLIB_WriteKeywords(name) {
   var keywordstextarea = document.getElementById(name+'-keyword-list');
   var keywordschecklist = document.getElementById(name+'-keywordchecklist');
-
-  var keywords = keywordstextarea.value.split(',');
+//HACK
+  var keywords = keywordstextarea.value.split(';');
   keywordschecklist.innerHTML = "";
   var i;
   for (i = 0; i < keywords.length; i++) {
     var val,txt, button_id, id = name;
-    val = keywords[i].trim();
+    val = keywords[i];
     if (val == '') continue;
     button_id = id + '-check-num-' + val;
     txt = '<span><a id="' + button_id + 
@@ -266,16 +266,16 @@ function WEBLIB_AddKeyword(name) {
   var keydiv = document.getElementById(name+'-keyword-div');
   var keywordstextarea = document.getElementById(name+'-keyword-list');
   var keyinput = document.getElementById(name+'-new-keyword-item_keyword');
-  if (keywordstextarea.value != "") keywordstextarea.value += ',';
-  keywordstextarea.value += keyinput.value.toUpperCase();
+  if (keywordstextarea.value != "") keywordstextarea.value += ';';
+  keywordstextarea.value += keyinput.value;
   WEBLIB_WriteKeywords(name);  
 }
 
 function WEBLIB_DeleteKeyword(name,keyword) {
   var keywordstextarea = document.getElementById(name+'-keyword-list');
-  var ic1 = keywordstextarea.value.indexOf(','+keyword+',');
-  var ic2 = keywordstextarea.value.indexOf(','+keyword);
-  var ic3 = keywordstextarea.value.indexOf(keyword+',');
+  var ic1 = keywordstextarea.value.indexOf(';'+keyword+';');
+  var ic2 = keywordstextarea.value.indexOf(';'+keyword);
+  var ic3 = keywordstextarea.value.indexOf(keyword+'');
   if (ic1 >= 0) {
     keywordstextarea.value = keywordstextarea.value.substr(0,ic1) + 
 			     keywordstextarea.value.substr(ic1+keyword.length+1);
@@ -385,6 +385,15 @@ function WEBLIB_AddToDescription(value) {
 
 function WEBLIB_ClearDescription() {
     document.getElementById('description').value = '';
+}
+
+//HACK
+function WEBLIB_AddToSubject(value) {
+    document.getElementById('subject').value += value+"\n";
+}
+
+function WEBLIB_ClearSubject() {
+    document.getElementById('subject').value = '';
 }
 
 function WEBLIB_ClearKeywords() {

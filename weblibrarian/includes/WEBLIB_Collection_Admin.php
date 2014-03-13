@@ -583,13 +583,13 @@ class WEBLIB_Collection_Admin extends WEBLIB_Collection_Shared {
 	  ?></div><div class="hide-if-no-js">
 		<label class="screen-reader-text" 
 		       for="itemedit-new-keyword-item_keyword"><?php _e('Item Keywords','web-librarian'); ?></label>
-		<div class="keywordhint"><?php _e('Add New Keyword','web-librarian'); ?></div>
+		<div class="keywordhint"><?php _e('Add New Location','web-librarian'); ?></div>
 	    <p><input type="text" id="itemedit-new-keyword-item_keyword" 
 		      name="newkeyword" class="newkeyword form-input-tip" 
 		      size="16" autocomplete="off" value="" />
 	       <input type="button" class="button" value="<?php _e('Add','web-librarian'); ?>" 
 			onclick="WEBLIB_AddKeyword('itemedit');" /></p>
-	    <p class="howto"><?php _e('Separate keywords with commas','web-librarian'); ?></p></div> 
+	    <p class="howto"><?php _e('Separate locations with semicolon, or add location one by one','web-librarian'); ?></p></div> 
 		<div id="itemedit-keywordchecklist" class="keywordchecklist">
 		<script type="text/javascript">
 			WEBLIB_WriteKeywords('itemedit');</script></div><?php
@@ -680,7 +680,8 @@ class WEBLIB_Collection_Admin extends WEBLIB_Collection_Shared {
 
   function getkeywordsfromform()
   {
-    return explode(',',$_REQUEST['keywordlist']);
+      //HACK
+    return explode(';',$_REQUEST['keywordlist']);
   }
 
   function add_item_bulk() {

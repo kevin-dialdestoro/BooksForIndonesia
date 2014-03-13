@@ -151,6 +151,9 @@ wp_enqueue_script('AWSFunctions_js',WEBLIB_JSURL . '/AWSFunctions.js',
       <option value="Keywords"><?php _e('Keywords','web-librarian'); ?></option>
     </select>
     <input id="SearchString" type='text' value="" />
+    <label for="inputISBN"><?php _e('ISBN:','web-librarian'); ?></label>
+    <input id="inputISBN" type='text' value="" />
+
     <input type="button" id="Go" onclick="AWSSearch(1);" value="<?php _e('Go','web-librarian'); ?>" />
   </span>
 </div>
