@@ -86,7 +86,7 @@ class WEBLIB_ShortCodes {
   function item_list ($atts, $content=null, $code="") {
     extract( shortcode_atts ( array(
 	'name' => 'itemlist',
-	'per_page' => 10,
+	'per_page' => 20,
 	'moreinfourl' => '',
 	'inlinemoreinfo' => false,
 	'holdbutton' => false ), $atts ) );
