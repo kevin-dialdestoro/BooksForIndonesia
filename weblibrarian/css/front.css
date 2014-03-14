@@ -29,43 +29,43 @@
 }
 
 .keywordchecklist {
-	margin-left: 14px;
-	font-size: 12px;
-	overflow: auto;
+    margin-left: 14px;
+    font-size: 12px;
+    overflow: auto;
 }
 
 .keywordchecklist strong {
-	margin-left: -8px;
-	position: absolute;
+    margin-left: -8px;
+    position: absolute;
 }
 
 .keywordchecklist span {
-	margin-right: 25px;
-	display: block;
-	float: left;
-	font-size: 11px;
-	line-height: 1.8em;
-	white-space: nowrap;
-	cursor: default;
+    margin-right: 25px;
+    display: block;
+    float: left;
+    font-size: 11px;
+    line-height: 1.8em;
+    white-space: nowrap;
+    cursor: default;
 }
 
 .keywordchecklist span a {
-	margin: 3px 0pt 0pt -12px;
-	cursor: pointer;
-	width: 12px;
-	height: 12px;
-	display: block;
-	float: left;
-	/*text-indent: -9999px;*/
-	overflow: hidden;
-	position: absolute;
-	color: blue;
+    margin: 3px 0pt 0pt -12px;
+    cursor: pointer;
+    width: 12px;
+    height: 12px;
+    display: block;
+    float: left;
+    /*text-indent: -9999px;*/
+    overflow: hidden;
+    position: absolute;
+    color: blue;
 }
 
 .howto {
-	font-style: italic;
-	display: block;
-	font-family: "Lucida Grande", Verdana, Arial, "Bitstream Vera Sans", sans-serif;
+    font-style: italic;
+    display: block;
+    font-family: "Lucida Grande", Verdana, Arial, "Bitstream Vera Sans", sans-serif;
 }
 
 .keywordssdiv .the-keywordss {
@@ -137,15 +137,15 @@ a.weblib-button:visited {
 
 .weblib-item-pagination-table {
   display: table;
-  width: 40%;
-  margin: 2px 30%;
+  width: 30%;
+  margin: 2px 35%;
 }
 
 .weblib-item-pagination {
   display: table-row;
   width: 100%;
   padding: 8px 0px;
-  font-size: 120%;
+  font-size: 100%;
 }
 
 .weblib-item-pagination .pagelabel {
@@ -156,6 +156,7 @@ a.weblib-button:visited {
 }
 
 .weblib-item-pagination .pagelink {
+width: 3%;
   vertical-align: top;
   display: table-cell;
   margin: 0px;
@@ -163,8 +164,21 @@ a.weblib-button:visited {
 
 .weblib-item-pagination .pagenumform {
   white-space: nowrap;
-  width: 25%;
+  width: 21%;
 }
+
+
+.weblib-item-pagination .pagenumform input{
+    vertical-align: top;
+}
+
+.weblib-item-pagination .pagenumform form{
+    width:120px;
+    margin-left: auto ;
+    margin-right: auto ;
+}
+
+
 
 .weblib-total-results {
   white-space: nowrap;
@@ -231,10 +245,6 @@ a.weblib-button:visited {
 .weblib-item-content-element {
   display: table-row;
 }
-
-
-
-
 
 .weblib-item-element {
   display: table-cell;

@@ -13,7 +13,10 @@ class WEBLIB_ShortCodes {
 				'subject' => __('Subject','web-librarian') , 
 				'keyword' => __('Location','web-librarian'), 
 				'isbn' => __('ISBN','web-librarian'));
-
+    $this->CategoryTypes = array ('0' => __('All','web-librarian'),
+    '1' => __('Childrens books','web-librarian'),
+    '2' => __('Novel and light reading','web-librarian'),
+    '3' => __('Textbooks','web-librarian'));
     add_shortcode('weblib_searchform' ,array($this,'search_form'));
     add_shortcode('weblib_itemlist'  ,array($this,'item_list'));
     add_shortcode('weblib_itemdetail',array($this,'item_detail'));
@@ -26,6 +29,7 @@ class WEBLIB_ShortCodes {
 			'actionurl' => '',
 			'method' => 'GET' ), $atts ) );
     $searchby  = isset($_REQUEST['searchby'])  ? $_REQUEST['searchby']  : 'title';
+    $inCategory  = isset($_REQUEST['inCategory'])  ? $_REQUEST['inCategory']  : '0';
     $searchbox = isset($_REQUEST['searchbox']) ? $_REQUEST['searchbox'] : '';
     $weblib_orderby = isset( $_REQUEST['weblib_orderby'] ) ? $_REQUEST['weblib_orderby'] : 'barcode';
     if ( empty( $weblib_orderby ) ) $weblib_orderby = 'barcode';
@@ -34,7 +38,17 @@ class WEBLIB_ShortCodes {
 
     $result  = '<form id="'.$name.'" method="'.$method.'" action="'.
 		$actionurl.'">';
-    $result .= '<p><label for="searchby">'. __('Search:','web-librarian').'</label>';
+        //hack
+    $result .= '<p><label for="inCategory">'.'Category '.'</label>';
+    $result .= '<select id="inCategory" name="inCategory" >';
+    foreach ($this->CategoryTypes as $value => $label) {
+      $result .= '<option value="'.$value.'"';
+      if ($value == $inCategory) {$result .= ' selected="selected"';}
+      $result .= '>'.$label."</option>\n";
+    }
+    $result .= "</select>\n<br />";
+    
+    $result .= '<label for="searchby">'. __('Search ','web-librarian').'</label>';
     $result .= '<select id="searchby" name="searchby" >';
     foreach ($this->SearchTypes as $value => $label) {
       $result .= '<option value="'.$value.'"';
@@ -42,8 +56,10 @@ class WEBLIB_ShortCodes {
       $result .= '>'.$label."</option>\n";
     }
     $result .= "</select>\n";
-    $result .= '<label for="searchbox">&nbsp;'.__('for','web-librarian').'</label><input id="searchbox" name="searchbox" value="'.$searchbox.'" /><br />';
-    $result .= '<label for="weblib_orderby">'.__('Sort by:','web-librarian').'</label>';
+    
+    $result .= '<label for="searchbox">&nbsp;'.__('for','web-librarian').'&nbsp;</label><input id="searchbox" name="searchbox" value="'.$searchbox.'" /><br />';
+    
+    $result .= '<label for="weblib_orderby">'.__('Sort by ','web-librarian').'</label>';
     $result .= '<select id="weblib_orderby" name="weblib_orderby">';
     foreach (array('barcode' => __('System Sorted','web-librarian'), 
 		   'title' => __('Title','web-librarian'), 
@@ -62,7 +78,7 @@ class WEBLIB_ShortCodes {
       $result .= '>'.$label."</option>\n";
     }
     $result .= "</select>\n";
-    $result .= '<br /><input class="weblib-button" type="submit" value="'.__('Search','web-librarian').'" /></p>';
+    $result .= '<br /><input class="ui-button" type="submit" value="'.__('Search','web-librarian').'" /></p>';
     $result .= "</form>\n";
     return $result;
   }
@@ -100,15 +116,16 @@ class WEBLIB_ShortCodes {
     }
 
     $searchby  = isset($_REQUEST['searchby'])  ? $_REQUEST['searchby']  : 'title';
+    $inCategory  = isset($_REQUEST['inCategory'])  ? $_REQUEST['inCategory']  : '0';
     $searchbox = isset($_REQUEST['searchbox']) ? $_REQUEST['searchbox'] : '';
     $weblib_orderby = isset( $_REQUEST['weblib_orderby'] ) ? $_REQUEST['weblib_orderby'] : 'barcode';
     if ( empty( $weblib_orderby ) ) $weblib_orderby = 'barcode';
     $weblib_order = isset( $_REQUEST['weblib_order'] ) ? $_REQUEST['weblib_order'] : 'ASC';
     if ( empty( $weblib_order ) ) $weblib_order = 'ASC';
 
-    if ($searchbox == '') {
+    if ($searchbox == '' && $inCategory == '0') {
       $all_items = WEBLIB_ItemInCollection::AllBarCodes($weblib_orderby,$weblib_order);
-    } else {
+    } else if ($searchbox != '' && $inCategory == '0'){
       switch($searchby) {
 	case 'title':
 	  $all_items = WEBLIB_ItemInCollection::FindItemByTitle('%'.$searchbox.'%',$weblib_orderby,$weblib_order);
@@ -126,6 +143,26 @@ class WEBLIB_ShortCodes {
 	  $all_items = WEBLIB_ItemInCollection::FindItemByKeyword('%'.$searchbox.'%',$weblib_orderby,$weblib_order);
 	  break;
       }
+    } else if ($searchbox != '' && $inCategory != '0'){
+      switch($searchby) {
+    case 'title':
+      $all_items = WEBLIB_ItemInCollection::FindItemByTitleCategory('%'.$searchbox.'%',$weblib_orderby,$weblib_order,'%'.$inCategory.'%');
+      break;
+    case 'author':
+      $all_items = WEBLIB_ItemInCollection::FindItemByAuthorCategory('%'.$searchbox.'%',$weblib_orderby,$weblib_order,'%'.$inCategory.'%');
+      break;
+    case 'subject':
+      $all_items = WEBLIB_ItemInCollection::FindItemBySubjectCategory('%'.$searchbox.'%',$weblib_orderby,$weblib_order,'%'.$inCategory.'%');
+      break;
+    case 'isbn':
+      $all_items = WEBLIB_ItemInCollection::FindItemByISBNCategory('%'.$searchbox.'%',$weblib_orderby,$weblib_order,'%'.$inCategory.'%');
+      break;
+    case 'keyword':
+      $all_items = WEBLIB_ItemInCollection::FindItemByKeywordCategory('%'.$searchbox.'%',$weblib_orderby,$weblib_order,'%'.$inCategory.'%');
+      break;
+      }
+    } else {
+      $all_items = WEBLIB_ItemInCollection::FindItemByCategory('%'.$searchbox.'%',$weblib_orderby,$weblib_order,'%'.$inCategory.'%');
     }
 
     $per_page = isset($_REQUEST['per_page']) ? $_REQUEST['per_page'] : $per_page;
@@ -140,9 +177,9 @@ class WEBLIB_ShortCodes {
 
     $result .= '<span class="weblib-total-results">';
     if ($total_items==1) {
-	$result .= __('1 Item Matched.','web-librarian');
+	$result .= __('1 Book found','web-librarian');
     } else {
-	$result .= sprintf(__('%d Items Matched.','web-librarian'),$total_items);
+	$result .= sprintf(__('%d Books Collected..','web-librarian'),$total_items);
     }
     $result .= '</span><br clear="all" />';
 
@@ -160,7 +197,8 @@ class WEBLIB_ShortCodes {
       $moreinfourl = add_query_arg(array('searchby' => $searchby,
 					 'searchbox' => $searchbox,
 					 'weblib_orderby' => $weblib_orderby,
-					 'weblib_order' => $weblib_order),$moreinfourl);
+					 'weblib_order' => $weblib_order,
+                     'inCategory' => $weblib_order),$moreinfourl);
     }
 
     $result .= $this->generate_pagination($pagenum,$total_pages,$per_page,
@@ -200,42 +238,41 @@ class WEBLIB_ShortCodes {
 
     $result  = '<div class="weblib-item-pagination-table">';
     $result .= '<div class="weblib-item-pagination">';
-    $result .= '<span class="pagelabel">Result&nbsp;Page:</span>';
-    $result .= '<span class="pagelink" style="width=5%;"><a class="weblib-button" href="';
+    $result .= '<div class="pagelink"><a class="ui-button" href="';
     $result .= add_query_arg(array_merge($otherparams,
 					 array('pagenum' => 1,
 					       'per_page' => $per_page)),
 			     get_permalink( ));
-    $result .= '">&lt;&lt;</a></span>';
-    $result .= '<span class="pagelink" style="width=5%;"><a class="weblib-button" href="';
+    $result .= '">&lt;&lt;</a></div>';
+    $result .= '<div class="pagelink"><a class="ui-button" href="';
     $result .= add_query_arg(array_merge($otherparams,
 					 array('pagenum' => 
 						  $pagenum > 1 ? $pagenum-1 : 1,
 					       'per_page' => $per_page)),
 			     get_permalink( ));
-    $result .= '">&lt;</a></span>';
-    $result .= '<span class="pagelink pagenumform">';
+    $result .= '">&lt;</a></div>';
+    $result .= '<div style = "white-space:nowrap;" class="pagelink pagenumform">';
     $result .= '<form action="'.get_permalink( ).'" method="get">';
-    $result .= '<input class="weblib-button" type="submit" value="'. __('Goto Page','web-librarian').'" />';
-    $result .= '<input name="pagenum" type="text" size="2" maxlength="2" value="'.$pagenum.'" />';
-    $result .= 'of '.$lastpage;
+    $result .= '<input class="ui-button" type="submit" value="'. __('Page','web-librarian').'" />';
+    $result .= '<input id = "pagenum" name="pagenum" type="text" size="2" maxlength="2" value="'.$pagenum.'" />';
+    $result .= '<label for "pagenum">'.'of'.'&nbsp;'.$lastpage.'</label>';
     foreach (array_merge($otherparams,array('per_page' => $per_page)) as $key => $val) {
       $result .= '<input type="hidden" name="'.$key.'" value="'.$val.'" />';
     }
-    $result .= '</form></span>';
-    $result .= '<span class="pagelink" style="width=5%;"><a class="weblib-button" href="';
+    $result .= '</form></div>';
+    $result .= '<div class="pagelink"><a class="ui-button" href="';
     $result .= add_query_arg(array_merge($otherparams,
 					 array('pagenum' =>
 						$pagenum < $lastpage ? $pagenum+1 : $lastpage,
 						'per_page' => $per_page)),
 			     get_permalink( ));
-    $result .= '">&gt;</a></span>';
-    $result .= '<span class="pagelink" style="width=5%;"><a class="weblib-button" href="';
+    $result .= '">&gt;</a></div>';
+    $result .= '<div class="pagelink"><a class="ui-button" href="';
     $result .= add_query_arg(array_merge($otherparams,
 			     		array('pagenum' => $lastpage,
 				   	'per_page' => $per_page)),
 			     get_permalink( ));
-    $result .= '">&gt;&gt;</a></span>';
+    $result .= '">&gt;&gt;</a></div>';
     $result .= '</div></div><br clear="all" />';
     return $result;
   }
@@ -339,12 +376,12 @@ class WEBLIB_ShortCodes {
 	  $result .= '<span class="weblib-item-left-content">'.$item->subject().'</span>';
 	  $result .= '</span><!-- weblib-item-content-element -->';
 	}
-	// if ($item->category() != '') {
-	  // $result .= '<span class="weblib-item-content-element">';
-	  // $result .= '<span class="weblib-item-left-head">'.__('Category','web-librarian').'</span>';
-	  // $result .= '<span class="weblib-item-left-content">'.$item->category().'</span>';
-	  // $result .= '</span><!-- weblib-item-content-element -->';
-	// }
+	if ($item->category() != '') {
+	  $result .= '<span class="weblib-item-content-element">';
+	  $result .= '<span class="weblib-item-left-head">'.__('Category','web-librarian').'</span>';
+	  $result .= '<span class="weblib-item-left-content">'.$item->category().'</span>';
+	  $result .= '</span><!-- weblib-item-content-element -->';
+	}
 	if ($item->media() != '') {
 	  $result .= '<span class="weblib-item-content-element">';
 	  $result .= '<span class="weblib-item-left-head">'.__('Media','web-librarian').'</span>';

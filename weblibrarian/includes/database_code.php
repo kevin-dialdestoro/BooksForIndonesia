@@ -1058,6 +1058,106 @@ class WEBLIB_ItemInCollection {
 	  }
 	  return $barcodes;
 	}
+        
+    //for a mix of search by and category
+    static function FindItemByTitleCategory($pattern,$orderby = 'barcode', $order = 'ASC', $categoryPattern) {
+      global $wpdb;
+      $olderror = $wpdb->show_errors(get_option('weblib_debugdb') != 'off');
+      $sql = $wpdb->prepare(
+            'SELECT barcode FROM '.
+            WEBLIB_COLLECTION.
+            ' where title like %s AND category like %s order by '.$orderby.' '.$order,
+            $pattern, $categoryPattern);
+      $rawbarcodes = $wpdb->get_col($sql);
+      $wpdb->show_errors($olderror);
+      $barcodes = array();
+      foreach ($rawbarcodes as $bc) {
+        $barcodes[] = stripslashes($bc);
+      }
+      return $barcodes;
+    }
+    static function FindItemByAuthorCategory($pattern,$orderby = 'barcode', $order = 'ASC', $categoryPattern) {
+      global $wpdb;
+      $olderror = $wpdb->show_errors(get_option('weblib_debugdb') != 'off');
+      $sql = $wpdb->prepare(
+            'SELECT barcode FROM '.
+            WEBLIB_COLLECTION.
+            ' where author like %s AND category like %s order by '.$orderby.' '.$order,
+            $pattern, $categoryPattern);
+      $rawbarcodes = $wpdb->get_col($sql);
+      $wpdb->show_errors($olderror);
+      $barcodes = array();
+      foreach ($rawbarcodes as $bc) {
+        $barcodes[] = stripslashes($bc);
+      }
+      return $barcodes;
+    }
+    static function FindItemBySubjectCategory($pattern,$orderby = 'barcode', $order = 'ASC', $categoryPattern) {
+      global $wpdb;
+      $olderror = $wpdb->show_errors(get_option('weblib_debugdb') != 'off');
+      $sql = $wpdb->prepare(
+            'SELECT barcode FROM '.
+            WEBLIB_COLLECTION.
+            ' where subject like %s AND category like %s order by '.$orderby.' '.$order,
+            $pattern, $categoryPattern);
+      $wpdb->show_errors($olderror);
+      $barcodes = array();
+      foreach ($rawbarcodes as $bc) {
+        $barcodes[] = stripslashes($bc);
+      }
+      return $barcodes;
+    }
+    static function FindItemByISBNCategory($pattern,$orderby = 'barcode', $order = 'ASC', $categoryPattern) {
+      global $wpdb;
+      $olderror = $wpdb->show_errors(get_option('weblib_debugdb') != 'off');
+      $sql = $wpdb->prepare(
+            'SELECT barcode FROM '.
+            WEBLIB_COLLECTION.
+            ' where isbn like %s AND category like %s order by '.$orderby.' '.$order,
+            $pattern, $categoryPattern);
+      $rawbarcodes = $wpdb->get_col($sql);
+      $wpdb->show_errors($olderror);
+      $barcodes = array();
+      foreach ($rawbarcodes as $bc) {
+        $barcodes[] = stripslashes($bc);
+      }
+      return $barcodes;
+    }
+        static function FindItemByKeywordCategory($pattern,$orderby = 'barcode', $order = 'ASC', $categoryPattern) {
+      global $wpdb;
+      $olderror = $wpdb->show_errors(get_option('weblib_debugdb') != 'off');
+      $sql = $wpdb->prepare(
+            'SELECT DISTINCT K.barcode FROM '.
+            WEBLIB_KEYWORDS.' K, '.WEBLIB_COLLECTION.' C'.
+            ' where keyword like %s AND category like %s && K.barcode = C.barcode'.
+            ' order by C.'.$orderby.' '.$order,$pattern, $categoryPattern);
+      $rawbarcodes = $wpdb->get_col($sql); 
+      $wpdb->show_errors($olderror);
+      $barcodes = array();
+      foreach ($rawbarcodes as $bc) {
+        $barcodes[] = stripslashes($bc);
+      }
+      return $barcodes;
+    }
+
+    //for category only
+    static function FindItemByCategory($pattern,$orderby = 'barcode', $order = 'ASC', $categoryPattern) {
+      global $wpdb;
+      $olderror = $wpdb->show_errors(get_option('weblib_debugdb') != 'off');
+      $sql = $wpdb->prepare(
+            'SELECT barcode FROM '.
+            WEBLIB_COLLECTION.
+            ' where category like %s order by '.$orderby.' '.$order,
+             $categoryPattern);
+      $rawbarcodes = $wpdb->get_col($sql);
+      $wpdb->show_errors($olderror);
+      $barcodes = array();
+      foreach ($rawbarcodes as $bc) {
+        $barcodes[] = stripslashes($bc);
+      }
+      return $barcodes;
+    }
+
 	function addkeywordto($keyword) {
 	  global $wpdb;
 	  $olderror = $wpdb->show_errors(get_option('weblib_debugdb') != 'off');
