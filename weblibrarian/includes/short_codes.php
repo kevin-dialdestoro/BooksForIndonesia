@@ -31,8 +31,8 @@ class WEBLIB_ShortCodes {
     $searchby  = isset($_REQUEST['searchby'])  ? $_REQUEST['searchby']  : 'title';
     $inCategory  = isset($_REQUEST['inCategory'])  ? $_REQUEST['inCategory']  : '0';
     $searchbox = isset($_REQUEST['searchbox']) ? $_REQUEST['searchbox'] : '';
-    $weblib_orderby = isset( $_REQUEST['weblib_orderby'] ) ? $_REQUEST['weblib_orderby'] : 'barcode';
-    if ( empty( $weblib_orderby ) ) $weblib_orderby = 'barcode';
+    $weblib_orderby = isset( $_REQUEST['weblib_orderby'] ) ? $_REQUEST['weblib_orderby'] : 'title';
+    if ( empty( $weblib_orderby ) ) $weblib_orderby = 'title';
     $weblib_order = isset( $_REQUEST['weblib_order'] ) ? $_REQUEST['weblib_order'] : 'ASC';
     if ( empty( $weblib_order ) ) $weblib_order = 'ASC';
 
@@ -61,7 +61,7 @@ class WEBLIB_ShortCodes {
     
     $result .= '<label for="weblib_orderby">'.__('Sort by ','web-librarian').'</label>';
     $result .= '<select id="weblib_orderby" name="weblib_orderby">';
-    foreach (array('barcode' => __('System Sorted','web-librarian'), 
+    foreach (array('barcode' => __('Date added','web-librarian'), 
 		   'title' => __('Title','web-librarian'), 
 		   'author' => __('Author','web-librarian')) as $field => $label) {
       $result .= '<option value="'.$field.'"';
@@ -118,8 +118,8 @@ class WEBLIB_ShortCodes {
     $searchby  = isset($_REQUEST['searchby'])  ? $_REQUEST['searchby']  : 'title';
     $inCategory  = isset($_REQUEST['inCategory'])  ? $_REQUEST['inCategory']  : '0';
     $searchbox = isset($_REQUEST['searchbox']) ? $_REQUEST['searchbox'] : '';
-    $weblib_orderby = isset( $_REQUEST['weblib_orderby'] ) ? $_REQUEST['weblib_orderby'] : 'barcode';
-    if ( empty( $weblib_orderby ) ) $weblib_orderby = 'barcode';
+    $weblib_orderby = isset( $_REQUEST['weblib_orderby'] ) ? $_REQUEST['weblib_orderby'] : 'title';
+    if ( empty( $weblib_orderby ) ) $weblib_orderby = 'title';
     $weblib_order = isset( $_REQUEST['weblib_order'] ) ? $_REQUEST['weblib_order'] : 'ASC';
     if ( empty( $weblib_order ) ) $weblib_order = 'ASC';
 
@@ -198,14 +198,15 @@ class WEBLIB_ShortCodes {
 					 'searchbox' => $searchbox,
 					 'weblib_orderby' => $weblib_orderby,
 					 'weblib_order' => $weblib_order,
-                     'inCategory' => $weblib_order),$moreinfourl);
+                     'inCategory' => $inCategory),$moreinfourl);
     }
 
     $result .= $this->generate_pagination($pagenum,$total_pages,$per_page,
 					  array('searchby' => $searchby,
 						'searchbox' => $searchbox,
 						'weblib_orderby' => $weblib_orderby,
-						'weblib_order' => $weblib_order));
+						'weblib_order' => $weblib_order,
+                        'inCategory' => $inCategory));
     $result .= '<div class="weblib-item-table">';
     $index = $start;
     foreach ($items as $barcode) {
@@ -224,7 +225,8 @@ class WEBLIB_ShortCodes {
 					  array('searchby' => $searchby,
 						'searchbox' => $searchbox,
 						'weblib_orderby' => $weblib_orderby,
-						'weblib_order' => $weblib_order));
+						'weblib_order' => $weblib_order,
+						'inCategory' => $inCategory));
     return $result;
   }
 
