@@ -14,8 +14,8 @@ class WEBLIB_ShortCodes {
 				'keyword' => __('Location','web-librarian'), 
 				'isbn' => __('ISBN','web-librarian'));
     $this->CategoryTypes = array ('0' => __('All','web-librarian'),
-    '1' => __('Childrens books','web-librarian'),
-    '2' => __('Novel and light reading','web-librarian'),
+    '1' => __('Children\'s books','web-librarian'),
+    '2' => __('Novel and light-reading','web-librarian'),
     '3' => __('Textbooks','web-librarian'));
     add_shortcode('weblib_searchform' ,array($this,'search_form'));
     add_shortcode('weblib_itemlist'  ,array($this,'item_list'));
@@ -381,7 +381,17 @@ class WEBLIB_ShortCodes {
 	if ($item->category() != '') {
 	  $result .= '<span class="weblib-item-content-element">';
 	  $result .= '<span class="weblib-item-left-head">'.__('Category','web-librarian').'</span>';
-	  $result .= '<span class="weblib-item-left-content">'.$item->category().'</span>';
+      $tempCat = $item->category();
+      if ($tempCat == '1') {
+          $tempCat = 'Children\'s books';
+      } else if ($tempCat == '2') {
+          $tempCat = 'Novel and light-reading';
+      } else if ($tempCat == '3') {
+          $tempCat = 'Textbook';
+      } else {
+          $tempCat = 'Unspecified';
+      }
+	  $result .= '<span class="weblib-item-left-content">'.$tempCat.'</span>';
 	  $result .= '</span><!-- weblib-item-content-element -->';
 	}
 	if ($item->media() != '') {
