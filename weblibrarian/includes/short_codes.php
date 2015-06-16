@@ -412,12 +412,13 @@ class WEBLIB_ShortCodes {
 	  $result .= '<span class="weblib-item-left-content">'.$item->isbn().'</span>';
 	  $result .= '</span><!-- weblib-item-content-element -->';
 	}
-	if ($item->callnumber() != '') {
-	  $result .= '<span class="weblib-item-content-element">';
-	  $result .= '<span class="weblib-item-left-head">'.__('Call Number','web-librarian').'</span>';
-	  $result .= '<span class="weblib-item-left-content">'.$item->callnumber().'</span>';
-	  $result .= '</span><!-- weblib-item-content-element -->';
-	}
+	# HACK
+	// if ($item->callnumber() != '') {
+	//   $result .= '<span class="weblib-item-content-element">';
+	//   $result .= '<span class="weblib-item-left-head">'.__('Call Number','web-librarian').'</span>';
+	//   $result .= '<span class="weblib-item-left-content">'.$item->callnumber().'</span>';
+	//   $result .= '</span><!-- weblib-item-content-element -->';
+	// }
 	// if ($item->type() != '') {
 	  // $result .= '<span class="weblib-item-content-element">';
 	  // $result .= '<span class="weblib-item-left-head">'.__('Type','web-librarian').'</span>';
@@ -471,10 +472,10 @@ class WEBLIB_ShortCodes {
       $result .= $space.$keyword;
       $space  = '; ';
     }
-    
-	if ($item->callnumber() != '') {
-	  $result .= '<br />'.__('Call Number:','web-librarian').'&nbsp;'.$item->callnumber();
-	}
+    #HACK
+	// if ($item->callnumber() != '') {
+	//   $result .= '<br />'.__('Call Number:','web-librarian').'&nbsp;'.$item->callnumber();
+	// }
 	$outitem = WEBLIB_OutItem::OutItemByBarcode($barcode);
 	$numberofholds = WEBLIB_HoldItem::HoldCountsOfBarcode($barcode);
 	if ($outitem != null) {
